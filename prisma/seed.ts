@@ -1,7 +1,6 @@
 import "dotenv/config";
-import { PrismaClient } from "../src/generated/prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 import bcrypt from "bcryptjs";
+import { createPrismaClient } from "../src/lib/create-prisma-client";
 import {
   ARC_CATEGORIES,
   CHARACTER_CATEGORIES,
@@ -9,10 +8,7 @@ import {
   DEVICE_CATEGORIES,
 } from "../src/lib/categories";
 
-const adapter = new PrismaBetterSqlite3({
-  url: process.env.DATABASE_URL ?? "file:./dev.db",
-});
-const prisma = new PrismaClient({ adapter });
+const prisma = createPrismaClient();
 
 async function main() {
   const adminEmail = process.env.ADMIN_EMAIL ?? "admin@grandlinewallpapers.com";

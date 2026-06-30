@@ -1,0 +1,59 @@
+// Use this schema for production (PostgreSQL).
+// Copy to schema.prisma before deploying, OR run:
+//   copy prisma\schema.production.prisma prisma\schema.prisma   (Windows)
+//   cp prisma/schema.production.prisma prisma/schema.prisma    (Mac/Linux)
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String   @default("Admin")
+  createdAt DateTime @default(now())
+}
+
+model Category {
+  id          String              @id @default(cuid())
+  name        String
+  slug        String              @unique
+  type        String
+  description String?
+  sortOrder   Int                 @default(0)
+  wallpapers  WallpaperCategory[]
+}
+
+model Wallpaper {
+  id            String              @id @default(cuid())
+  title         String
+  slug          String              @unique
+  description   String?
+  imagePath     String
+  width         Int
+  height        Int
+  artistName    String
+  artistUrl     String?
+  isTrending    Boolean             @default(false)
+  downloadCount Int                 @default(0)
+  viewCount     Int                 @default(0)
+  published     Boolean             @default(true)
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  categories    WallpaperCategory[]
+}
+
+model WallpaperCategory {
+  wallpaperId String
+  categoryId  String
+  wallpaper   Wallpaper @relation(fields: [wallpaperId], references: [id], onDelete: Cascade)
+  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([wallpaperId, categoryId])
+}

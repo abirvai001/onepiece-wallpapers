@@ -2,19 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { readFile } from "fs/promises";
 import path from "path";
 import { getWallpaperBySlug, incrementDownloadCount } from "@/lib/wallpapers";
-import { getUploadsDir } from "@/lib/utils";
-
-function getCandidateUploadDirs(): string[] {
-  const primary = getUploadsDir();
-  const cwd = process.cwd();
-  const legacy = path.join(cwd, "public", "uploads");
-  const candidates = [primary];
-  if (legacy !== primary) candidates.push(legacy);
-  // Also try the standalone public directly as another fallback
-  const standaloneLegacy = path.join(cwd, ".next", "standalone", "public", "uploads");
-  if (!candidates.includes(standaloneLegacy)) candidates.push(standaloneLegacy);
-  return candidates;
-}
+import { getCandidateUploadDirs } from "@/lib/uploads";
 
 export async function GET(
   _request: NextRequest,

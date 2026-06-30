@@ -4,7 +4,8 @@ import path from "path";
 import sharp from "sharp";
 import { requireAdmin } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { slugify, getUploadsDir } from "@/lib/utils";
+import { slugify } from "@/lib/utils";
+import { getUploadsDir } from "@/lib/uploads";
 
 export async function POST(request: NextRequest) {
   const session = await requireAdmin();

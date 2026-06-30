@@ -42,20 +42,13 @@ git push -u origin main
 
 ### Step 2 — Switch Prisma to PostgreSQL
 
-Copy the production schema:
+The Dockerfile (used by Railway) automatically uses `prisma/schema.production.prisma` during the build.
 
-```powershell
-copy prisma\schema.production.prisma prisma\schema.prisma
-npx prisma generate
-```
+You no longer need to manually copy the schema before deploying.
 
-Commit and push:
+(If you want to test locally with Postgres, you can still copy it manually.)
 
-```powershell
-git add prisma/schema.prisma
-git commit -m "Use PostgreSQL schema for production"
-git push
-```
+Commit and push your code (including the Dockerfile).
 
 > Keep developing locally? Restore SQLite later with `git checkout prisma/schema.prisma` from a backup, or maintain two branches.
 

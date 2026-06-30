@@ -7,6 +7,14 @@ WORKDIR /app
 
 # Copy package files
 COPY package.json package-lock.json* ./
+
+# Copy Prisma files BEFORE npm ci because "postinstall": "prisma generate" runs immediately
+COPY prisma ./prisma
+COPY prisma.config.ts* ./
+
+# For production Docker builds, use the production schema (PostgreSQL)
+RUN cp prisma/schema.production.prisma prisma/schema.prisma || true
+
 RUN npm ci
 
 # Build stage
@@ -14,6 +22,9 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+# Ensure production schema is active for this build
+RUN cp prisma/schema.production.prisma prisma/schema.prisma || true
 
 # Generate Prisma client (needed for build/runtime)
 RUN npx prisma generate

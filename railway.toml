@@ -1,6 +1,7 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm ci --omit=dev && npx prisma generate && npx prisma db push && npm run build"
+# Do NOT run npm ci here — install already runs in nixpacks.toml
+buildCommand = "npx prisma generate && npx prisma db push && npm run build"
 
 [deploy]
 startCommand = "npm start"

@@ -1,8 +1,9 @@
 [phases.setup]
 nixPkgs = ["nodejs_22"]
 
+# Let Nixpacks run the default npm install — do NOT run npm ci again in build
 [phases.install]
-cmds = ["npm ci --omit=dev"]
+cmds = ["npm install --omit=dev --no-audit --no-fund"]
 
 [phases.build]
 cmds = [

@@ -10,6 +10,8 @@ import {
 } from "@/lib/wallpapers";
 import { SITE_CONFIG } from "@/lib/categories";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const [trending, recent, categories] = await Promise.all([
     getTrendingWallpapers(6),

@@ -95,11 +95,13 @@ Or use any long random string (32+ characters).
 
 1. Web service → **Settings** → **Volumes**
 2. **Add Volume**:
-   - Mount path: `/app/public/uploads`
+   - Mount path: `/app/.next/standalone/public/uploads`
    - Size: 1 GB (increase later)
 3. Redeploy
 
 Without this volume, uploaded wallpapers disappear after redeploy.
+
+**Note**: The project is configured for Next.js standalone output + explicit public copy in build so that wallpaper thumbnails are served correctly from the minimal server and persist via the volume.
 
 ### Step 6 — Seed the database (first deploy only)
 

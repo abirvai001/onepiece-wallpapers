@@ -4,7 +4,7 @@ import path from "path";
 import sharp from "sharp";
 import { requireAdmin } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { slugify } from "@/lib/utils";
+import { slugify, getUploadsDir } from "@/lib/utils";
 
 export async function POST(request: NextRequest) {
   const session = await requireAdmin();
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
     const baseSlug = slugify(title);
     const uniqueSuffix = Date.now().toString(36);
     const filename = `${baseSlug}-${uniqueSuffix}.${ext}`;
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
+    const uploadDir = getUploadsDir();
     await mkdir(uploadDir, { recursive: true });
 
     const filePath = path.join(uploadDir, filename);

@@ -122,7 +122,7 @@ Update `NEXT_PUBLIC_SITE_URL` to your custom domain.
 2. Add **PostgreSQL** plugin (Railway provides `DATABASE_URL` automatically)
 3. Set env vars: `AUTH_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `NEXT_PUBLIC_SITE_URL`
 4. Switch Prisma to PostgreSQL (same as above)
-5. Railway persists volumes — you can also mount a volume for `public/uploads/` if not using R2
+5. Railway persists volumes — mount to `/app/.next/standalone/public/uploads` (see PRODUCTION.md)
 
 ---
 
@@ -135,7 +135,7 @@ docker run -p 3000:3000 \
   -e ADMIN_EMAIL="abirodroid.admob@gmail.com" \
   -e ADMIN_PASSWORD="strong-password" \
   -e NEXT_PUBLIC_SITE_URL="https://yourdomain.com" \
-  -v uploads:/app/public/uploads \
+  -v uploads:/app/.next/standalone/public/uploads \
   onepiece-wallpapers
 ```
 

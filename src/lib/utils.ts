@@ -33,13 +33,19 @@ export function cn(...classes: (string | false | null | undefined)[]): string {
  */
 export function getUploadsDir(): string {
   const cwd = process.cwd();
-  // Standalone production layout (after our build copy)
-  if (
-    process.env.NODE_ENV === "production" &&
-    fs.existsSync(path.join(cwd, ".next", "standalone", "server.js"))
-  ) {
+  const isProd = process.env.NODE_ENV === "production";
+
+  // Docker standalone layout (standard Dockerfile + many Railway setups)
+  // After COPY --from=builder /app/.next/standalone ./   → server.js lives at cwd/server.js
+  if (isProd && fs.existsSync(path.join(cwd, "server.js"))) {
+    return path.join(cwd, "public", "uploads");
+  }
+
+  // Alternative subdir standalone layout (some nixpacks / custom setups)
+  if (isProd && fs.existsSync(path.join(cwd, ".next", "standalone", "server.js"))) {
     return path.join(cwd, ".next", "standalone", "public", "uploads");
   }
-  // Dev, normal next start, Dockerfile layouts etc.
+
+  // Local dev + fallback
   return path.join(cwd, "public", "uploads");
 }

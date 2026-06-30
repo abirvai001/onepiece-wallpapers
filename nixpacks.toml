@@ -7,11 +7,9 @@ cmds = ["npm install --no-audit --no-fund"]
 [phases.build]
 cmds = [
   "npx prisma generate",
-  "npx prisma db push",
-  "npm run build",
-  "cp -r public .next/standalone/ || true",
-  "mkdir -p .next/standalone/.next/static && cp -r .next/static .next/standalone/.next/ || true"
+  # NOTE: prisma db push is better done via Pre-deploy command in Railway or in Dockerfile
+  "npm run build"
 ]
 
 [start]
-cmd = "HOSTNAME=0.0.0.0 node .next/standalone/server.js"
+cmd = "node server.js"

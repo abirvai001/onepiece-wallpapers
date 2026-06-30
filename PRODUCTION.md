@@ -95,13 +95,13 @@ Or use any long random string (32+ characters).
 
 1. Web service → **Settings** → **Volumes**
 2. **Add Volume**:
-   - Mount path: `/app/.next/standalone/public/uploads`
+   - Mount path: `/app/public/uploads`
    - Size: 1 GB (increase later)
 3. Redeploy
 
 Without this volume, uploaded wallpapers disappear after redeploy.
 
-**Note**: The project is configured for Next.js standalone output + explicit public copy in build so that wallpaper thumbnails are served correctly from the minimal server and persist via the volume.
+**Note**: The project now includes a `Dockerfile` for reliable Next.js standalone builds on Railway. Railway will auto-detect the Dockerfile. The volume is mounted at the standard public location used by the Dockerfile. Re-upload any existing wallpapers after the new deploy.
 
 ### Step 6 — Seed the database (first deploy only)
 

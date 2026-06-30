@@ -6,6 +6,8 @@ import { authConfig } from "@/lib/auth.config";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
+  // Required on Railway — not auto-detected like Vercel
+  trustHost: true,
   providers: [
     Credentials({
       name: "credentials",

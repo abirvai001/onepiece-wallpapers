@@ -36,7 +36,7 @@ export async function GET(
   const ext = path.extname(wallpaper.imagePath).slice(1) || "jpg";
   const filename = `${wallpaper.slug}.${ext}`;
 
-  return new NextResponse(file, {
+  return new NextResponse(new Uint8Array(file), {
     headers: {
       "Content-Type": `image/${ext === "jpg" ? "jpeg" : ext}`,
       "Content-Disposition": `attachment; filename="${filename}"`,

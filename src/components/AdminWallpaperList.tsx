@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Trash2, TrendingUp, Eye, EyeOff } from "lucide-react";
 import { formatResolution } from "@/lib/utils";
+import { getWallpaperImageUrl } from "@/lib/image-url";
 
 type Wallpaper = {
   id: string;
@@ -65,9 +66,10 @@ export function AdminWallpaperList({ wallpapers }: AdminWallpaperListProps) {
         >
           <div className="relative h-20 w-32 shrink-0 overflow-hidden rounded-lg">
             <Image
-              src={`/${wp.imagePath}`}
+              src={getWallpaperImageUrl(wp.imagePath)}
               alt={wp.title}
               fill
+              unoptimized
               className="object-cover"
               sizes="128px"
             />

@@ -7,6 +7,10 @@ import path from "path";
  * Handles different production layouts (Dockerfile standalone vs some nixpacks setups).
  */
 export function getUploadsDir(): string {
+  if (process.env.UPLOADS_DIR) {
+    return process.env.UPLOADS_DIR;
+  }
+
   const cwd = process.cwd();
   const isProd = process.env.NODE_ENV === "production";
 

@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Download, Eye, TrendingUp, Smartphone, Monitor } from "lucide-react";
 import { formatResolution } from "@/lib/utils";
+import { getWallpaperImageUrl } from "@/lib/image-url";
 
 type WallpaperCardProps = {
   slug: string;
@@ -37,9 +38,10 @@ export function WallpaperCard({
     <Link href={`/wallpaper/${slug}`} className="wallpaper-card group">
       <div className={`relative overflow-hidden ${aspectClass}`}>
         <Image
-          src={`/${imagePath}`}
+          src={getWallpaperImageUrl(imagePath)}
           alt={title}
           fill
+          unoptimized
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover transition duration-500 group-hover:scale-110"
         />

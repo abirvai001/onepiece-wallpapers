@@ -10,6 +10,7 @@ import {
   incrementViewCount,
 } from "@/lib/wallpapers";
 import { formatResolution, formatDate } from "@/lib/utils";
+import { getWallpaperImageUrl } from "@/lib/image-url";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: PageProps) {
     title: wallpaper.title,
     description: `${wallpaper.title} — One Piece wallpaper by ${wallpaper.artistName}. ${formatResolution(wallpaper.width, wallpaper.height)}.`,
     openGraph: {
-      images: [`/${wallpaper.imagePath}`],
+      images: [getWallpaperImageUrl(wallpaper.imagePath)],
     },
   };
 }
@@ -52,10 +53,11 @@ export default async function WallpaperPage({ params }: PageProps) {
           <div className="wanted-poster overflow-hidden rounded-xl">
             <div className={`relative ${previewAspect}`}>
               <Image
-                src={`/${wallpaper.imagePath}`}
+                src={getWallpaperImageUrl(wallpaper.imagePath)}
                 alt={wallpaper.title}
                 fill
                 priority
+                unoptimized
                 sizes="(max-width: 1024px) 100vw, 70vw"
                 className="object-contain"
               />

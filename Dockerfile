@@ -50,19 +50,26 @@ ENV NODE_ENV=production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy public folder (for static assets + uploads target)
+# Copy public static assets (categories, icons) — NOT uploads
 COPY --from=builder /app/public ./public
+
+# Remove public/uploads — wallpapers are stored outside public/ and served via /api/media
+# Do NOT mount a Railway volume on public/uploads (causes lost+found EACCES errors)
+RUN rm -rf ./public/uploads
 
 # Copy the standalone server output (this places server.js at /app/server.js)
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 
+# Standalone may re-copy public/uploads — remove again so Next.js never scans a volume mount here
+RUN rm -rf ./public/uploads
+
 # Copy static assets
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Persistent wallpaper storage (mount Railway volume here)
+# Persistent wallpaper storage — mount Railway volume at this path only
 RUN mkdir -p /var/lib/postgresql/data && chown -R nextjs:nodejs /var/lib/postgresql/data
 
-USER nextjs
+RUN apk add --no-cache su-exec
 
 EXPOSE 3000
 
@@ -70,5 +77,6 @@ ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 ENV UPLOADS_DIR=/var/lib/postgresql/data
 
-# Run the standalone server
-CMD ["node", "server.js"]
+# Start as root to fix volume permissions, then run as nextjs
+USER root
+CMD ["sh", "-c", "chown -R nextjs:nodejs /var/lib/postgresql/data 2>/dev/null || true; exec su-exec nextjs node server.js"]

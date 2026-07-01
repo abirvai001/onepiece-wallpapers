@@ -2,7 +2,10 @@ import "server-only";
 import fs from "fs";
 import path from "path";
 
-/** Production upload directory (Railway volume mount path). */
+/**
+ * Production upload directory — mount Railway volume HERE (not under public/).
+ * Mounting a volume on public/uploads breaks Next.js (lost+found EACCES).
+ */
 export const PRODUCTION_UPLOADS_DIR = "/var/lib/postgresql/data";
 
 /**
@@ -17,7 +20,6 @@ export function getUploadsDir(): string {
     return PRODUCTION_UPLOADS_DIR;
   }
 
-  // Local dev
   return path.join(process.cwd(), "public", "uploads");
 }
 
@@ -26,17 +28,18 @@ export function getUploadsDir(): string {
  */
 export function getCandidateUploadDirs(): string[] {
   const primary = getUploadsDir();
-  const cwd = process.cwd();
   const candidates = [primary];
 
-  const fallbacks = [
-    path.join(cwd, "public", "uploads"),
-    path.join(cwd, ".next", "standalone", "public", "uploads"),
-    PRODUCTION_UPLOADS_DIR,
-  ];
-
-  for (const dir of fallbacks) {
-    if (!candidates.includes(dir)) candidates.push(dir);
+  // Dev-only fallbacks — never scan public/uploads in production (volume lost+found breaks Next.js)
+  if (process.env.NODE_ENV !== "production") {
+    const cwd = process.cwd();
+    const devFallbacks = [
+      path.join(cwd, "public", "uploads"),
+      path.join(cwd, ".next", "standalone", "public", "uploads"),
+    ];
+    for (const dir of devFallbacks) {
+      if (!candidates.includes(dir)) candidates.push(dir);
+    }
   }
 
   return candidates;

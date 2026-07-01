@@ -59,8 +59,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 # Copy static assets
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Ensure uploads directory exists (volume will mount over it)
-RUN mkdir -p ./public/uploads && chown -R nextjs:nodejs ./public/uploads
+# Persistent wallpaper storage (mount Railway volume here)
+RUN mkdir -p /var/lib/postgresql/data && chown -R nextjs:nodejs /var/lib/postgresql/data
 
 USER nextjs
 
@@ -68,6 +68,7 @@ EXPOSE 3000
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
+ENV UPLOADS_DIR=/var/lib/postgresql/data
 
 # Run the standalone server
 CMD ["node", "server.js"]

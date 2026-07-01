@@ -31,6 +31,10 @@ RUN cp prisma/schema.production.prisma prisma/schema.prisma || true
 # Generate Prisma client (needed for build/runtime)
 RUN npx prisma generate
 
+# Railway injects service variables at build time — required if any build step touches the DB
+ARG DATABASE_URL
+ENV DATABASE_URL=${DATABASE_URL}
+
 # Build the application (standalone output enabled in next.config)
 RUN npm run build
 

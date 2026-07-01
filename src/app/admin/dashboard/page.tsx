@@ -6,6 +6,8 @@ import { AdminUploadForm } from "@/components/AdminUploadForm";
 import { AdminWallpaperList } from "@/components/AdminWallpaperList";
 import { LogOut, Shield } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminDashboardPage() {
   const session = await requireAdmin();
   if (!session) redirect("/admin/login");
